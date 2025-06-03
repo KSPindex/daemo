@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대모산 뽑기 게임</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #e0e7f0, #d0e0eb);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            width: 180px;
+            height: 250px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease-in-out;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-probability {
+            font-size: 0.9rem;
+            font-weight: normal;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .card-normal { background-color: #9e9e9e; }
+        .card-rare { background-color: #4CAF50; }
+        .card-epic { background-color: #2196F3; }
+        .card-pro { background-color: #9C27B0; }
+        .card-legendary { background-color: #FF9800; }
+        .card-hacker { background-color: #F44336; }
+        .card-god { background-color: #FFD700; }
+        .card-daemodaemo {
+            background-image: linear-gradient(to right, #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee);
+            animation: rainbow-glow 3s infinite alternate;
+        }
+
+        @keyframes rainbow-glow {
+            0% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.9), 0 0 40px rgba(255, 0, 0, 0.7); }
+            14% { box-shadow: 0 0 20px rgba(255, 165, 0, 0.9), 0 0 40px rgba(255, 165, 0, 0.7); }
+            28% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.9), 0 0 40px rgba(255, 255, 0, 0.7); }
+            42% { box-shadow: 0 0 20px rgba(0, 128, 0, 0.9), 0 0 40px rgba(0, 128, 0, 0.7); }
+            56% { box-shadow: 0 0 20px rgba(0, 0, 255, 0.9), 0 0 40px rgba(0, 0, 255, 0.7); }
+            70% { box-shadow: 0 0 20px rgba(75, 0, 130, 0.9), 0 0 40px rgba(75, 0, 130, 0.7); }
+            84% { box-shadow: 0 0 20px rgba(238, 130, 238, 0.9), 0 0 40px rgba(238, 130, 238, 0.7); }
+            100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.9), 0 0 40px rgba(255, 0, 0, 0.7); }
+        }
+
+        .card-animated {
+            animation-duration: 0.8s;
+            animation-fill-mode: forwards;
+            animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.7) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .card-normal.card-animated { animation-name: fade-in; }
+
+        @keyframes scale-bounce {
+            0% { opacity: 0; transform: scale(0.4) rotateX(90deg); }
+            70% { opacity: 1; transform: scale(1.1) rotateX(-10deg); }
+            100% { transform: scale(1) rotateX(0deg); }
+        }
+        .card-rare.card-animated { animation-name: scale-bounce; }
+
+        @keyframes pop-in {
+            0% { opacity: 0; transform: scale(0.1) rotateY(180deg); }
+            80% { opacity: 1; transform: scale(1.1) rotateY(-20deg); }
+            100% { transform: scale(1) rotateY(0deg); }
+        }
+        .card-epic.card-animated { animation-name: pop-in; }
+
+        @keyframes rotate-in {
+            0% { opacity: 0; transform: scale(0.3) rotate(-360deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        .card-pro.card-animated { animation-name: rotate-in; }
+
+        @keyframes legendary-glow {
+            0% { opacity: 0; transform: scale(0.5); box-shadow: 0 0 0px rgba(255, 152, 0, 0); }
+            50% { opacity: 1; transform: scale(1.08); box-shadow: 0 0 40px rgba(255, 152, 0, 0.9), 0 0 80px rgba(255, 152, 0, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+        }
+        .card-legendary.card-animated { animation-name: legendary-glow; animation-duration: 1s; }
+
+        @keyframes hacker-glitch {
+            0%, 100% { transform: translateX(0) scale(1); opacity: 1; }
+            20% { transform: translateX(-10px) scale(0.98); opacity: 0.9; }
+            40% { transform: translateX(10px) scale(1.02); opacity: 1; }
+            60% { transform: translateX(-5px) scale(0.99); opacity: 0.95; }
+            80% { transform: translateX(5px) scale(1.01); opacity: 1; }
+        }
+        .card-hacker.card-animated { animation-name: fade-in, hacker-glitch; animation-duration: 0.6s, 0.4s; animation-iteration-count: 1, 3; }
+
+        @keyframes god-flash {
+            0% { opacity: 0; transform: scale(0.01); filter: brightness(0); }
+            25% { opacity: 1; transform: scale(1.3); filter: brightness(3); }
+            50% { transform: scale(0.9); filter: brightness(1.5); }
+            75% { transform: scale(1.1); filter: brightness(2); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .card-god.card-animated { animation-name: god-flash; animation-duration: 1s; }
+
+        @keyframes daemodaemo-entry {
+            0% { opacity: 0; transform: scale(0.01) rotate(1080deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        .card-daemodaemo.card-animated { animation-name: rainbow-glow, daemodaemo-entry; animation-duration: 3s, 1.2s; animation-iteration-count: infinite, 1; animation-direction: alternate, normal; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        button:hover {
+            background-color: #45a049;
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        }
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1) translate(-50%, -50%);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        button:active::after {
+            transform: scale(20) translate(-50%, -50%);
+            opacity: 1;
+            transition: 0s;
+        }
+
+        .collected-card-item {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        .collected-card-item.card-normal { background-color: #9e9e9e; }
+        .collected-card-item.card-rare { background-color: #4CAF50; }
+        .collected-card-item.card-epic { background-color: #2196F3; }
+        .collected-card-item.card-pro { background-color: #9C27B0; }
+        .collected-card-item.card-legendary { background-color: #FF9800; }
+        .collected-card-item.card-hacker { background-color: #F44336; }
+        .collected-card-item.card-god { background-color: #FFD700; }
+        .collected-card-item.card-daemodaemo {
+            background-image: linear-gradient(to right, #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee);
+            animation: rainbow-glow-small 3s infinite alternate;
+        }
+
+        @keyframes rainbow-glow-small {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.7); }
+            14% { box-shadow: 0 0 5px rgba(255, 165, 0, 0.7); }
+            28% { box-shadow: 0 0 5px rgba(255, 255, 0, 0.7); }
+            42% { box-shadow: 0 0 5px rgba(0, 128, 0, 0.7); }
+            56% { box-shadow: 0 0 5px rgba(0, 0, 255, 0.7); }
+            70% { box-shadow: 0 0 5px rgba(75, 0, 130, 0.7); }
+            84% { box-shadow: 0 0 5px rgba(238, 130, 238, 0.7); }
+            100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.7); }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+            .card {
+                width: 150px;
+                height: 200px;
+                font-size: 1.5rem;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+            .collected-card-item {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">대모산 뽑기 게임</h1>
+
+        <div class="mb-4 text-lg text-gray-700">
+            뽑은 횟수: <span id="pullCountDisplay" class="font-semibold text-blue-600">0</span>
+        </div>
+
+        <button id="drawButton" class="mb-6">뽑기!</button>
+
+        <div id="resultCard" class="card hidden">
+            <span id="resultRarityName"></span>
+            <span id="resultRarityProb" class="card-probability"></span>
+        </div>
+
+        <h2 class="text-xl font-semibold mb-3 text-gray-800">등급별 확률</h2>
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table id="probabilityTable" class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-3 px-4 uppercase text-sm text-gray-600 border-b">등급</th>
+                        <th class="py-3 px-4 uppercase text-sm text-gray-600 border-b">확률 (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="my-cards-section mt-8">
+            <h2 class="text-xl font-semibold mb-3 text-gray-800">내 대모산</h2>
+            <div id="myCardsContainer" class="flex flex-wrap justify-center gap-2">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rarities = [
+            { name: '대모대모', baseProb: 0.00000001, colorClass: 'card-daemodaemo' },
+            { name: '신', baseProb: 0.00000001, colorClass: 'card-god' },
+            { name: '해커', baseProb: 0.00000008, colorClass: 'card-hacker' },
+            { name: '전설', baseProb: 4.99999990, colorClass: 'card-legendary' },
+            { name: '프로', baseProb: 10.00000000, colorClass: 'card-pro' },
+            { name: '에픽', baseProb: 15.00000000, colorClass: 'card-epic' },
+            { name: '고급', baseProb: 30.00000000, colorClass: 'card-rare' },
+            { name: '보통', baseProb: 40.00000000, colorClass: 'card-normal' },
+        ];
+
+        const luckMultipliers = [
+            { pulls: 1000, multiplier: 100 },
+            { pulls: 500, multiplier: 50 },
+            { pulls: 100, multiplier: 10 },
+            { pulls: 50, multiplier: 5 },
+            { pulls: 10, multiplier: 2 },
+            { pulls: 5, multiplier: 1.5 },
+        ];
+
+        let pullCount = 0;
+        const pullCountDisplay = document.getElementById('pullCountDisplay');
+        const drawButton = document.getElementById('drawButton');
+        const resultCard = document.getElementById('resultCard');
+        const resultRarityName = document.getElementById('resultRarityName');
+        const resultRarityProb = document.getElementById('resultRarityProb');
+        const probabilityTableBody = document.querySelector('#probabilityTable tbody');
+        const myCardsContainer = document.getElementById('myCardsContainer');
+
+        let collectedCards = new Map();
+
+        function calculateCurrentProbabilities() {
+            const currentRarities = JSON.parse(JSON.stringify(rarities));
+            let activeMultiplier = 1;
+            for (const luck of luckMultipliers) {
+                if (pullCount > 0 && pullCount % luck.pulls === 0) {
+                    activeMultiplier = luck.multiplier;
+                    break;
+                }
+            }
+
+            let totalBoostAmount = 0;
+
+            for (let i = 0; i < currentRarities.length; i++) {
+                const rarity = currentRarities[i];
+                // '보통'과 '고급' 등급은 확률이 감소될 수 있으므로 배율 적용 대상에서 제외합니다.
+                if (rarity.name !== '보통' && rarity.name !== '고급') {
+                    const originalProb = rarities.find(r => r.name === rarity.name).baseProb;
+                    const boostedProb = originalProb * activeMultiplier;
+                    const boost = boostedProb - originalProb;
+
+                    rarity.currentProb = boostedProb;
+                    totalBoostAmount += boost;
+                } else {
+                    rarity.currentProb = rarity.baseProb;
+                }
+            }
+
+            let remainingBoostToDeduct = totalBoostAmount;
+
+            const normalRarity = currentRarities.find(r => r.name === '보통');
+            if (normalRarity && remainingBoostToDeduct > 0) {
+                const deductFromNormal = Math.min(remainingBoostToDeduct, normalRarity.currentProb);
+                normalRarity.currentProb -= deductFromNormal;
+                remainingBoostToDeduct -= deductFromNormal;
+            }
+
+            const rareRarity = currentRarities.find(r => r.name === '고급');
+            if (rareRarity && remainingBoostToDeduct > 0) {
+                const deductFromRare = Math.min(remainingBoostToDeduct, rareRarity.currentProb);
+                rareRarity.currentProb -= deductFromRare;
+                remainingBoostToDeduct -= deductFromRare;
+            }
+
+            currentRarities.forEach(rarity => {
+                if (rarity.currentProb < 0) {
+                    rarity.currentProb = 0;
+                }
+            });
+
+            let currentSum = currentRarities.reduce((sum, r) => sum + r.currentProb, 0);
+            if (currentSum !== 100 && currentSum > 0) {
+                currentRarities.forEach(rarity => {
+                    rarity.currentProb = (rarity.currentProb / currentSum) * 100;
+                });
+            }
+
+            return currentRarities;
+        }
+
+        function updateProbabilityTable() {
+            const currentRarities = calculateCurrentProbabilities();
+            probabilityTableBody.innerHTML = '';
+
+            const sortedRarities = [...currentRarities].sort((a, b) => b.currentProb - a.currentProb);
+
+            sortedRarities.forEach(rarity => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${rarity.name}</td>
+                    <td class="py-2 px-4 border-b">${rarity.currentProb.toFixed(8)}%</td>
+                `;
+                probabilityTableBody.appendChild(row);
+            });
+        }
+
+        function formatRarityName(name) {
+            // Simply append ' 대모산' to the original rarity name
+            return name + ' 대모산';
+        }
+
+        function updateMyCardsDisplay() {
+            myCardsContainer.innerHTML = '';
+
+            const sortedCollected = Array.from(collectedCards.entries()).sort((a, b) => {
+                const nameA = a[0];
+                const nameB = b[0];
+                // Find original rarity objects by matching formatted names
+                const originalRarityA = rarities.find(r => formatRarityName(r.name) === nameA);
+                const originalRarityB = rarities.find(r => formatRarityName(r.name) === nameB);
+                // Sort by base probability (ascending, so lower probability items come first)
+                return (originalRarityA ? originalRarityA.baseProb : 0) - (originalRarityB ? originalRarityB.baseProb : 0);
+            });
+
+            sortedCollected.forEach(([name, count]) => {
+                const originalRarity = rarities.find(r => formatRarityName(r.name) === name);
+                if (originalRarity) {
+                    const cardItem = document.createElement('div');
+                    cardItem.classList.add('collected-card-item', originalRarity.colorClass);
+                    cardItem.innerHTML = `
+                        <span>${name}</span>
+                        <span class="font-bold">X${count}</span>
+                    `;
+                    myCardsContainer.appendChild(cardItem);
+                }
+            });
+        }
+
+        function drawItem() {
+            pullCount++;
+            pullCountDisplay.textContent = pullCount;
+
+            const currentRarities = calculateCurrentProbabilities();
+            updateProbabilityTable();
+
+            const randomNumber = Math.random() * 100;
+            let cumulativeProbability = 0;
+            let drawnRarity = null;
+
+            for (const rarity of currentRarities) {
+                cumulativeProbability += rarity.currentProb;
+                if (randomNumber < cumulativeProbability) {
+                    drawnRarity = rarity;
+                    break;
+                }
+            }
+
+            if (drawnRarity) {
+                resultCard.classList.remove('hidden');
+
+                // Remove all previous rarity-specific classes and animation class
+                resultCard.classList.remove('card-normal', 'card-rare', 'card-epic', 'card-pro', 'card-legendary', 'card-hacker', 'card-god', 'card-daemodaemo', 'card-animated');
+
+                // Force reflow to restart CSS animation
+                void resultCard.offsetWidth;
+
+                const formattedName = formatRarityName(drawnRarity.name);
+                resultRarityName.textContent = formattedName;
+                resultRarityProb.textContent = `(${drawnRarity.currentProb.toFixed(8)}%)`;
+                
+                resultCard.classList.add('card', drawnRarity.colorClass);
+                resultCard.classList.add('card-animated');
+
+                collectedCards.set(formattedName, (collectedCards.get(formattedName) || 0) + 1);
+                updateMyCardsDisplay();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProbabilityTable();
+            drawButton.addEventListener('click', drawItem);
+            updateMyCardsDisplay();
+        });
+    </script>
+</body>
+</html>
