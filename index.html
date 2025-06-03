@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대모산 뽑기 게임</title>
+    <title>대모산 뽑기</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -277,7 +277,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">대모산 뽑기 게임</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">대모산 뽑기</h1>
 
         <div class="mb-4 text-lg text-gray-700">
             뽑은 횟수: <span id="pullCountDisplay" class="font-semibold text-blue-600">0</span>
@@ -357,7 +357,7 @@
 
             for (let i = 0; i < currentRarities.length; i++) {
                 const rarity = currentRarities[i];
-                // '보통'과 '고급' 등급은 확률이 감소될 수 있으므로 배율 적용 대상에서 제외합니다.
+                
                 if (rarity.name !== '보통' && rarity.name !== '고급') {
                     const originalProb = rarities.find(r => r.name === rarity.name).baseProb;
                     const boostedProb = originalProb * activeMultiplier;
@@ -419,7 +419,7 @@
         }
 
         function formatRarityName(name) {
-            // Simply append ' 대모산' to the original rarity name
+           
             return name + ' 대모산';
         }
 
@@ -429,10 +429,10 @@
             const sortedCollected = Array.from(collectedCards.entries()).sort((a, b) => {
                 const nameA = a[0];
                 const nameB = b[0];
-                // Find original rarity objects by matching formatted names
+               
                 const originalRarityA = rarities.find(r => formatRarityName(r.name) === nameA);
                 const originalRarityB = rarities.find(r => formatRarityName(r.name) === nameB);
-                // Sort by base probability (ascending, so lower probability items come first)
+      
                 return (originalRarityA ? originalRarityA.baseProb : 0) - (originalRarityB ? originalRarityB.baseProb : 0);
             });
 
@@ -472,10 +472,9 @@
             if (drawnRarity) {
                 resultCard.classList.remove('hidden');
 
-                // Remove all previous rarity-specific classes and animation class
-                resultCard.classList.remove('card-normal', 'card-rare', 'card-epic', 'card-pro', 'card-legendary', 'card-hacker', 'card-god', 'card-daemodaemo', 'card-animated');
+                         resultCard.classList.remove('card-normal', 'card-rare', 'card-epic', 'card-pro', 'card-legendary', 'card-hacker', 'card-god', 'card-daemodaemo', 'card-animated');
 
-                // Force reflow to restart CSS animation
+              
                 void resultCard.offsetWidth;
 
                 const formattedName = formatRarityName(drawnRarity.name);
