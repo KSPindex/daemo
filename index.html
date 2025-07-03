@@ -1,0 +1,488 @@
+네, 알겠습니다. 제가 만들었다는 흔적을 완전히 지우고, 순수하게 사용자님의 요청에 따라 생성된 코드처럼 보이도록 수정된 HTML 코드를 제공해 드립니다. 주석과 기타 설명 문구에서 저의 언급을 모두 제거했습니다.
+
+GitHub 업로드 시 주의사항은 동일합니다:
+
+파일 구조:
+
+index.html (이 아래 코드를 저장하세요)
+
+classic.mp3
+
+dotoli.png (이 파일은 게임의 주인공이 됩니다)
+
+your_uploaded_image.jpg (배경 이미지, 파일 이름은 실제 이미지와 일치시켜주세요)
+
+index.html 파일 내에서 url('your_uploaded_image.jpg') 부분을 실제로 업로드하실 이미지 파일의 정확한 이름으로 변경해야 합니다.
+
+index.html (수정된 통합 웹 페이지 코드)
+HTML
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인생의 지혜와 놀이</title>
+    <style>
+        /* --- 일반 스타일 (고급스러운 분위기) --- */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 스크롤바 제거 */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 고급스러운 폰트 */
+            color: #f0f0f0; /* 밝은 색상 텍스트 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('image_27ce7f.jpg'); /* !!! 여기에 실제 이미지 파일 이름을 입력하세요 !!! */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(60%) contrast(110%) grayscale(20%); /* 어둡고 선명하며 약간의 흑백 효과 */
+            z-index: -2;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 오버레이 */
+            z-index: -1;
+        }
+
+        .header, .footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3.5em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            color: #e0e0e0;
+        }
+
+        /* --- 오디오 플레이어 스타일 --- */
+        .audio-player-container {
+            padding: 15px 30px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            margin-top: 20px; /* 헤더와의 간격 */
+            z-index: 5;
+        }
+
+        audio {
+            width: 300px;
+            filter: invert(1) grayscale(1) brightness(1.2); /* 컨트롤을 밝게 표시 */
+        }
+        /* 웹킷 브라우저 (Chrome, Safari)용 오디오 컨트롤 특정 스타일 */
+        audio::-webkit-media-controls-panel {
+            background-color: transparent;
+        }
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: #ffffff;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-mute-button,
+        audio::-webkit-media-controls-volume-slider,
+        audio::-webkit-media-controls-timeline {
+            filter: invert(1);
+        }
+
+        /* --- 게임 영역 스타일 --- */
+        .game-area {
+            flex-grow: 1; /* 남은 수직 공간 채우기 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+
+        .game-container {
+            width: 800px;
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        #dotoli {
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            width: 50px;
+            height: 50px;
+            background-image: url('dotoli.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transition: bottom 0.2s linear; /* 부드러운 점프 애니메이션 */
+        }
+
+        .obstacle {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            height: 60px; /* 예시 크기 */
+            background-color: #7a4f0b; /* 장애물 갈색 */
+            left: 800px; /* 화면 밖에서 시작 */
+        }
+
+        .score-display {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.8em;
+            color: #ffd700; /* 점수 골드 색상 */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- 명언 스크롤러 스타일 --- */
+        .quote-scroller {
+            width: 80%;
+            height: 60px; /* 스크롤 영역 높이 */
+            margin-top: 30px;
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 10px 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            color: #d0d0d0;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .quote-text {
+            white-space: nowrap; /* 줄바꿈 방지 */
+            position: absolute;
+            left: 100%; /* 화면 오른쪽 밖에서 시작 */
+            animation: scroll-quotes linear infinite;
+        }
+
+        @keyframes scroll-quotes {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container"></div>
+    <div class="overlay"></div>
+
+    <div class="header">
+        <h1>인생의 지혜와 놀이</h1>
+        <div class="audio-player-container">
+            <audio id="backgroundMusic" controls loop autoplay>
+                <source src="classic.mp3" type="audio/mpeg">
+                죄송합니다. 귀하의 브라우저는 오디오 요소를 지원하지 않습니다.
+            </audio>
+        </div>
+    </div>
+
+    <div class="game-area">
+        <div class="game-container" id="gameContainer">
+            <div id="dotoli"></div>
+            <div class="score-display">점수: <span id="score">0</span></div>
+        </div>
+        <p style="margin-top: 20px; font-size: 1.2em; color: #aaa;">스페이스바를 눌러 도토리를 점프시키세요!</p>
+    </div>
+
+    <div class="footer">
+        <div class="quote-scroller">
+            <span class="quote-text" id="quoteText"></span>
+        </div>
+    </div>
+
+    <script>
+        // --- 명언 스크롤러 로직 ---
+        const quotes = [
+            "Life is what happens when you’re busy making other plans.” — John Lennon",
+            "“The purpose of life is to live it, to taste experience to the utmost.” — Eleanor Roosevelt",
+            "“In the end, it’s not the years in your life that count. It’s the life in your years.” — Abraham Lincoln",
+            "“Life is really simple, but we insist on making it complicated.” — Confucius",
+            "“You only live once, but if you do it right, once is enough.” — Mae West",
+            "“Life is either a daring adventure or nothing at all.” — Helen Keller",
+            "“To live is the rarest thing in the world. Most people exist, that is all.” — Oscar Wilde",
+            "“The good life is one inspired by love and guided by knowledge.” — Bertrand Russell",
+            "“Difficulties in life are intended to make us better, not bitter.” — Dan Reeves",
+            "“Do not take life too seriously. You will never get out of it alive.” — Elbert Hubbard",
+            "“Life isn’t about finding yourself. Life is about creating yourself.” — George Bernard Shaw",
+            "“Live as if you were to die tomorrow. Learn as if you were to live forever.” — Mahatma Gandhi",
+            "“Life is made of ever so many partings welded together.” — Charles Dickens",
+            "“Keep smiling, because life is a beautiful thing and there’s so much to smile about.” — Marilyn Monroe",
+            "“Where there is love there is life.” — Mahatma Gandhi",
+            "“Life shrinks or expands in proportion to one’s courage.” — Anaïs Nin",
+            "“Life is short, and it is up to you to make it sweet.” — Sarah Louise Delany",
+            "“The biggest adventure you can take is to live the life of your dreams.” — Oprah Winfrey",
+            "“Life is 10% what happens to you and 90% how you react to it.” — Charles R. Swindoll",
+            "“Go confidently in the direction of your dreams! Live the life you’ve imagined.” — Henry David Thoreau",
+            "“The best way to predict your future is to create it.” — Peter Drucker",
+            "“Believe that life is worth living and your belief will help create the fact.” — William James",
+            "“Enjoy the little things in life, for one day you may look back and realize they were the big things.” — Robert Brault",
+            "“Life is too important to be taken seriously.” — Oscar Wilde",
+            "“To succeed in life, you need two things: ignorance and confidence.” — Mark Twain",
+            "“Only a life lived for others is a life worthwhile.” — Albert Einstein",
+            "“Life is trying things to see if they work.” — Ray Bradbury",
+            "“The unexamined life is not worth living.” — Socrates",
+            "“Life is a long lesson in humility.” — James M. Barrie",
+            "“Life is from the inside out. When you shift on the inside, life shifts on the outside.” — Kamal Ravikant",
+            "“Life is about making an impact, not making an income.” — Kevin Kruse",
+            "“It is not length of life, but depth of life.” — Ralph Waldo Emerson",
+            "“Don’t cry because it’s over, smile because it happened.” — Dr. Seuss",
+            "“Life itself is the most wonderful fairy tale.” — Hans Christian Andersen",
+            "“Life is like riding a bicycle. To keep your balance you must keep moving.” — Albert Einstein",
+            "“Life is a question and how we live it is our answer.” — Gary Keller",
+            "“The greatest pleasure of life is love.” — Euripides",
+            "“Good friends, good books, and a sleepy conscience: this is the ideal life.” — Mark Twain",
+            "“Life is a succession of lessons which must be lived to be understood.” — Ralph Waldo Emerson",
+            "“The best thing to hold onto in life is each other.” — Audrey Hepburn",
+            "“A man who dares to waste one hour of time has not discovered the value of life.” — Charles Darwin",
+            "“Don’t count the days, make the days count.” — Muhammad Ali",
+            "“Life is a great big canvas, and you should throw all the paint on it you can.” — Danny Kaye",
+            "“Life is not measured by the number of breaths we take, but by the moments that take our breath away.” — Maya Angelou",
+            "“Live your life and forget your age.” — Norman Vincent Peale",
+            "“Life is short, and truth works far and lives long: let us then speak the truth.” — Arthur Schopenhauer",
+            "“A life without cause is a life without effect.” — Barbarella",
+            "“May you live every day of your life.” — Jonathan Swift",
+            "“Life is tough, but so are you.” — Unknown",
+            "“Every man dies. Not every man really lives.” — William Wallace",
+            "“Life is a gift, and it offers us the privilege, opportunity, and responsibility to give something back.” — Tony Robbins",
+            "“Life has no limitations, except the ones you make.” — Les Brown",
+            "“Life is short, smile while you still have teeth.” — Mallory Hopkins",
+            "“To live is so startling it leaves little time for anything else.” — Emily Dickinson",
+            "“Be happy for this moment. This moment is your life.” — Omar Khayyam",
+            "“Life is not about waiting for the storm to pass but learning to dance in the rain.” — Vivian Greene",
+            "“Life is a dream for the wise, a game for the fool, a comedy for the rich, a tragedy for the poor.” — Sholom Aleichem",
+            "“Life becomes easier when you learn to accept the apology you never got.” — Robert Brault",
+            "“Life is short. Do stuff that matters.” — Siqi Chen",
+            "“Life is not a problem to be solved, but a reality to be experienced.” — Søren Kierkegaard",
+            "“The art of life is to know how to enjoy a little and to endure much.” — William Hazlitt",
+            "“Life isn’t about waiting for the storm to pass, it’s about learning to dance in the rain.” — Vivian Greene",
+            "“The meaning of life is to find your gift. The purpose of life is to give it away.” — Pablo Picasso",
+            "“Life is made of moments. Don’t wait for them, create them.” — Unknown",
+            "“The biggest adventure you can take is to live the life of your dreams.” — Oprah Winfrey",
+            "“Life is short, break the rules, forgive quickly, kiss slowly, love truly, laugh uncontrollably.” — Mark Twain",
+            "“Life is short. Focus on what really matters most.” — Unknown",
+            "“Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.” — Buddha",
+            "“Our lives begin to end the day we become silent about things that matter.” — Martin Luther King Jr.",
+            "“Live the life you love. Love the life you live.” — Bob Marley",
+            "“Live simply so that others may simply live.” — Mahatma Gandhi",
+            "“You get in life what you have the courage to ask for.” — Oprah Winfrey",
+            "“Life is tough but so are you.” — Unknown",
+            "“Act as if what you do makes a difference. It does.” — William James",
+            "“Life is what you make it.” — Eleanor Roosevelt",
+            "“Dream as if you’ll live forever. Live as if you’ll die today.” — James Dean",
+            "“Your life does not get better by chance, it gets better by change.” — Jim Rohn",
+            "“Success is loving life and daring to live it.” — Maya Angelou",
+            "“Life is short. Live passionately.” — Marc Aurel",
+            "“Love the life you live. Live the life you love.” — Bob Marley",
+            "“Live life to the fullest, and focus on the positive.” — Matt Cameron",
+            "“A happy life consists in tranquility of mind.” — Cicero",
+            "“He who has a why to live can bear almost any how.” — Friedrich Nietzsche",
+            "“Life isn’t about getting and having, it’s about giving and being.” — Kevin Kruse",
+            "“Be yourself; everyone else is already taken.” — Oscar Wilde",
+            "“Life is the flower for which love is the honey.” — Victor Hugo",
+            "“Life is short. Eat dessert first.” — Jacques Torres",
+            "“Life is short, but it’s wide.” — Rebecca Wells",
+            "“Life always offers you a second chance. It’s called tomorrow.” — Dylan Thomas",
+            "“The most important thing is to enjoy your life—to be happy—it’s all that matters.” — Audrey Hepburn",
+            "“Every moment is a fresh beginning.” — T.S. Eliot",
+            "“Light tomorrow with today.” — Elizabeth Barrett Browning",
+            "“Life is a one-time offer, use it well.” — Unknown",
+            "“It always seems impossible until it’s done.” — Nelson Mandela",
+            "“Life is about moments: don’t wait for them, create them.” — Unknown",
+            "“Live for each second without hesitation.” — Elton John",
+            "“Life is a journey that must be traveled no matter how bad the roads and accommodations.” — Oliver Goldsmith",
+            "“The purpose of life is a life of purpose.” — Robert Byrne",
+            "“Life is the sum of all your choices.” — Albert Camus",
+            "“Life is beautiful.” — Roberto Benigni"
+        ];
+        let currentQuoteIndex = 0;
+        const quoteTextElement = document.getElementById('quoteText');
+        const quoteScrollerElement = document.querySelector('.quote-scroller');
+
+        function updateQuoteAndAnimation() {
+            quoteTextElement.textContent = quotes[currentQuoteIndex];
+            quoteTextElement.style.animation = 'none'; /* 애니메이션 초기화 */
+            void quoteTextElement.offsetWidth; /* 리플로우 트리거 */
+            quoteTextElement.style.animation = `scroll-quotes ${quotes[currentQuoteIndex].length * 0.15}s linear infinite`; /* 길이에 따라 속도 조절 */
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+        }
+
+        // 초기화 및 N초마다 명언 변경
+        updateQuoteAndAnimation();
+        setInterval(updateQuoteAndAnimation, 10000); // 10초마다 명언 변경
+
+        // --- 게임 로직 ---
+        const dotoli = document.getElementById('dotoli');
+        const gameContainer = document.getElementById('gameContainer');
+        const scoreDisplay = document.getElementById('score');
+
+        let isJumping = false;
+        let dotoliBottom = 0;
+        let score = 0;
+        let gameSpeed = 5;
+        let obstacleTimeout;
+        let gameOver = false;
+
+        function jump() {
+            if (isJumping) return;
+            isJumping = true;
+            let jumpHeight = 100; // 도토리 점프 높이
+            
+            let upInterval = setInterval(() => {
+                if (dotoliBottom < jumpHeight) {
+                    dotoliBottom += 10;
+                    dotoli.style.bottom = dotoliBottom + 'px';
+                } else {
+                    clearInterval(upInterval);
+                    let downInterval = setInterval(() => {
+                        if (dotoliBottom > 0) {
+                            dotoliBottom -= 10;
+                            dotoli.style.bottom = dotoliBottom + 'px';
+                        } else {
+                            clearInterval(downInterval);
+                            isJumping = false;
+                            dotoliBottom = 0; // 정확히 바닥에 놓이도록
+                            dotoli.style.bottom = dotoliBottom + 'px';
+                        }
+                    }, 20); // 더 빠르게 낙하
+                }
+            }, 20);
+        }
+
+        function generateObstacle() {
+            if (gameOver) return;
+
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            gameContainer.appendChild(obstacle);
+
+            let obstacleLeft = gameContainer.offsetWidth; // 오른쪽 가장자리에서 시작
+            const obstacleSpeed = gameSpeed; // 게임 속도와 일치
+
+            let obstacleInterval = setInterval(() => {
+                if (gameOver) {
+                    clearInterval(obstacleInterval);
+                    return;
+                }
+
+                obstacleLeft -= obstacleSpeed;
+                obstacle.style.left = obstacleLeft + 'px';
+
+                // 충돌 감지
+                const dotoliRect = dotoli.getBoundingClientRect();
+                const obstacleRect = obstacle.getBoundingClientRect();
+
+                // 게임 컨테이너 내에서의 상대적인 위치로 충돌 검사
+                // (게임 컨테이너의 위치를 고려)
+                const dotoliGameLeft = dotoliRect.left - gameContainer.getBoundingClientRect().left;
+                const dotoliGameRight = dotoliRect.right - gameContainer.getBoundingClientRect().left;
+                const dotoliGameBottom = dotoliRect.bottom - gameContainer.getBoundingClientRect().top;
+                const dotoliGameTop = dotoliRect.top - gameContainer.getBoundingClientRect().top;
+
+                const obstacleGameLeft = obstacleRect.left - gameContainer.getBoundingClientRect().left;
+                const obstacleGameRight = obstacleRect.right - gameContainer.getBoundingClientRect().left;
+                const obstacleGameBottom = obstacleRect.bottom - gameContainer.getBoundingClientRect().top;
+                const obstacleGameTop = obstacleRect.top - gameContainer.getBoundingClientRect().top;
+
+
+                if (obstacleGameLeft < dotoliGameRight &&
+                    obstacleGameRight > dotoliGameLeft &&
+                    obstacleGameTop < dotoliGameBottom &&
+                    obstacleGameBottom > dotoliGameTop) {
+                    // 충돌! 게임 오버
+                    clearInterval(obstacleInterval);
+                    endGame();
+                    return;
+                }
+
+                // 장애물이 도토리를 통과함
+                if (obstacleLeft + obstacle.offsetWidth < dotoli.offsetLeft && !obstacle.passed) {
+                    score++;
+                    scoreDisplay.textContent = score;
+                    obstacle.passed = true; // 점수 중복 방지
+                }
+
+                // 장애물이 화면 밖으로 나가면 제거
+                if (obstacleLeft < -obstacle.offsetWidth) {
+                    clearInterval(obstacleInterval);
+                    gameContainer.removeChild(obstacle);
+                }
+            }, 20);
+            
+            // 다음 장애물 생성 시간 무작위 설정
+            const nextObstacleTime = Math.random() * 2000 + 1000; // 1초에서 3초 사이
+            obstacleTimeout = setTimeout(generateObstacle, nextObstacleTime);
+        }
+
+        function startGame() {
+            score = 0;
+            scoreDisplay.textContent = score;
+            gameOver = false;
+            // 기존 장애물 모두 제거
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            clearTimeout(obstacleTimeout); // 이전 타임아웃이 있다면 제거
+
+            generateObstacle(); // 장애물 생성 시작
+        }
+
+        function endGame() {
+            gameOver = true;
+            alert(`게임 오버! 최종 점수: ${score}\n다시 시작하려면 확인을 누르세요.`);
+            startGame(); // 알림창 닫으면 게임 재시작
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                jump();
+            }
+        });
+
+        // 페이지 로드 시 게임 초기화
+        startGame();
+
+        // --- 음악 자동 재생 (브라우저 제한 가능성 있음) ---
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        // 즉시 재생 시도. 차단될 경우 사용자 상호작용 (예: 컨트롤 클릭)에 의존.
+        backgroundMusic.play().catch(error => {
+            console.log("자동 재생이 차단되었습니다. 사용자 상호작용이 필요할 수 있습니다.", error);
+        });
+
+    </script>
+</body>
+</html>
